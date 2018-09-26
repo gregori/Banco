@@ -1,3 +1,5 @@
+package banco.modelo;
+
 
 public class Conta {
 	private int agencia;

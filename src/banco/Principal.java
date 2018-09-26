@@ -1,4 +1,8 @@
+package banco;
 import java.util.Scanner;
+
+import banco.modelo.Cliente;
+import banco.modelo.Conta;
 
 
 public class Principal {

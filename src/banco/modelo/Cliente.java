@@ -1,3 +1,5 @@
+package banco.modelo;
+
 
 public class Cliente extends Pessoa {
 	private double rendaMensal;
