@@ -24,6 +24,7 @@ public class Principal {
 
 	}
 	
+	@SuppressWarnings("unused")
 	private static void contasComFlag(ArrayList<Conta> banco) {
 		boolean continua = true;
 		
