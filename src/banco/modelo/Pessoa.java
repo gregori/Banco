@@ -1,6 +1,7 @@
 package banco.modelo;
 
 public class Pessoa {
+	private int id;
 	private String nome;
 	private String endereco;
 	private long cpf;
@@ -9,13 +10,22 @@ public class Pessoa {
 	
 	public Pessoa() { }
 	
-	public Pessoa(String nome, String endereco, long cpf, long rg,
+	public Pessoa(int id, String nome, String endereco, long cpf, long rg,
 			long telefone) {
+		this.id = id;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.cpf = cpf;
 		this.rg = rg;
 		this.telefone = telefone;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -61,7 +71,7 @@ public class Pessoa {
 	@Override
 	public String toString() {
 		return "nome: " + getNome() 
-				+ "\nendereço: " + getEndereco()
+				+ "\nendereï¿½o: " + getEndereco()
 				+ "\nCPF: " 
 						+ String.valueOf(getCpf())
 						.replaceFirst("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", 
