@@ -1,45 +1,78 @@
 package banco.modelo;
 
 
-public class Cliente extends Pessoa implements Imprimivel {
-	private double rendaMensal;
+public class Livro implements Imprimivel {
 
-	public Cliente() { super(); }
+	private int id;
+	private String titulo;
+	private int anoPublicacao;
+	private String editora;
+	private Autor autor;
 	
-	public Cliente(int id, String nome, String endereco, long cpf, long rg,
-			long telefone, double rendaMensal) {
-		super(id, nome, endereco, cpf, rg, telefone);
-
-		this.rendaMensal = rendaMensal;
+	public int getId() {
+		return id;
 	}
 
-	public double getRendaMensal() {
-		return rendaMensal;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public void setRendaMensal(double rendaMensal) {
-		this.rendaMensal = rendaMensal;
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public int getAnoPublicacao() {
+		return anoPublicacao;
+	}
+
+	public void setAnoPublicacao(int anoPublicacao) {
+		this.anoPublicacao = anoPublicacao;
+	}
+
+	public String getEditora() {
+		return editora;
+	}
+
+	public void setEditora(String editora) {
+		this.editora = editora;
+	}
+
+	public Autor getAutor() {
+		return autor;
+	}
+
+	public void setAutor(Autor autor) {
+		this.autor = autor;
+	}
+	
+	public Livro() { }
+	
+	public Livro(int id, String titulo, int anoPublicacao, String editora, Autor autor) {
+		this.id = id;
+		this.titulo = titulo;
+		this.anoPublicacao = anoPublicacao;
+		this.editora = editora;
+		this.autor = autor;
 	}
 
 	@Override
 	public String toString() {
 		return super.toString()
-				+ String.format("\nRenda mensal: R$ %.2f", 
-						getRendaMensal());
+				+ String.format("\n");
 	}
 
 	@Override
 	public String imprimeEmLista() {
-		return String.format("%d\t%s\t%s\t%d\t%d\t%d%.2f", getId(), getNome(), getEndereco(), getCpf(), 
-				getRg(), getTelefone(),	getRendaMensal());
+		return String.format("%d\t%s\t%d\t%s", getId(), getTitulo(), getAnoPublicacao(), getEditora());
 	}
 
 	@Override
 	public String[] getColunas() {
-		String[] colunas = {"id", "Nome", "EndereÃ§o", "CPF", "RG", "Telefone", "Renda Mensal"};
+		String[] colunas = {"id", "Titulo", "Ano Publicação", "Editora"};
 		return colunas;
 	}
-	
-	
-	
 }

@@ -2,68 +2,65 @@ package banco.ui;
 
 import java.util.List;
 
-import banco.dao.ClienteDao;
-import banco.modelo.Cliente;
+import banco.dao.LivroDao;
+import banco.dao.AutorDao;
+import banco.modelo.Livro;
+import banco.modelo.Autor;
 
-public class InterfaceClienteTexto extends InterfaceModeloTexto {
+public class InterfaceLivroTexto extends InterfaceModeloTexto {
 	
-	private ClienteDao dao;
+	private LivroDao dao;
+	private AutorDao autorDao;
 	
-	public InterfaceClienteTexto() {
+	public InterfaceLivroTexto() {
 		super();
-		dao = new ClienteDao();
+		dao = new LivroDao();
 	}
 	
-	private Cliente obtemDadosCliente(Cliente cliente) {
+	private Livro obtemDadosLivro(Livro livro) {
 		
-		System.out.print("Insira o nome do cliente: ");
-		String nome = entrada.nextLine();
+		System.out.print("Insira o titulo do livro: ");
+		String titulo = entrada.nextLine();
 		
-		System.out.println("Insira o RG do cliente (somente nÃºmeros): ");
-		long rg = entrada.nextLong();
+		System.out.println("Insira o ano de publicação do livro (número de 4 dígitos): ");
+		int anoPublicacao = entrada.nextInt();
 		entrada.nextLine();
 		
-		System.out.println("Insira o CPF do cliente (somente nÃºmeros): ");
-		long cpf = entrada.nextLong();
+		System.out.println("Insira a editora do livro: ");
+		String editora = entrada.nextLine();
 		entrada.nextLine();
 		
-		System.out.println("Insira o endereco do cliente: ");
-		String endereco = entrada.nextLine();
+		System.out.println("Insira o id do autor do livro: ");
+		int autorId = entrada.nextInt();
 		
-		System.out.println("Insira o telefone do cliente (somente nÃºmeros): ");
-		long telefone = entrada.nextLong();
-		entrada.nextLine();
+		Autor autor = autorDao.getByKey(autorId);
 		
-		System.out.println("Insira a renda mensal do cliente (XXXXX,XX): ");
-		double renda = entrada.nextDouble();
-		entrada.nextLine();
+		Livro novoLivro = new Livro(0, titulo, anoPublicacao, editora, autor);
 		
-		Cliente novoCliente = new Cliente(0, nome, endereco, cpf, rg, telefone, renda);
-		
-		return novoCliente;
+		return novoLivro;
 	}
 	
 	@Override
 	public void adicionar() {
-		System.out.println("Adicionar cliente");
+		System.out.println("Adicionar livro");
 		System.out.println();
 		
-		Cliente novoCliente = obtemDadosCliente(null);	
-		dao.insert(novoCliente);
+		Livro novoLivro = obtemDadosLivro(null);	
+		dao.insert(novoLivro);
 		
 	}
 
 	@Override
 	public void listarTodos() {
-		List<Cliente> clientes = dao.getAll();
+		List<Livro> livros = dao.getAll();
 		
-		System.out.println("Lista de clientes");
+		System.out.println("Lista de livros");
 		System.out.println();
 		
-		System.out.println("id\tNome\tEndereco\tCPF\tRG\tTelefone\tRenda Mensal");
+		System.out.println("id\tTítulo\tAno Publicação\tEditora");
 		
-		for (Cliente cliente : clientes) {
-			imprimeItem(cliente);
+		for (Livro livro : livros) {
+			imprimeItem(livro);
 		}
 		
 	}
@@ -72,20 +69,20 @@ public class InterfaceClienteTexto extends InterfaceModeloTexto {
 	public void editar() {
 		listarTodos();
 		
-		System.out.println("Editar cliente");
+		System.out.println("Editar livro");
 		System.out.println();
 		
-		System.out.print("Entre o id do cliente: ");
+		System.out.print("Entre o id do livro: ");
 		int id = entrada.nextInt();
 		entrada.nextLine();
 		
-		Cliente clienteAModifcar = dao.getByKey(id);
+		Livro livroAModifcar = dao.getByKey(id);
 		
-		Cliente novoCliente = obtemDadosCliente(clienteAModifcar);
+		Livro novoLivro = obtemDadosLivro(livroAModifcar);
 		
-		novoCliente.setId(id);
+		novoLivro.setId(id);
 		
-		dao.update(novoCliente);
+		dao.update(novoLivro);
 		
 	}
 
@@ -93,10 +90,10 @@ public class InterfaceClienteTexto extends InterfaceModeloTexto {
 	public void excluir() {
 		listarTodos();
 		
-		System.out.println("Excluir cliente");
+		System.out.println("Excluir livro");
 		System.out.println();
 		
-		System.out.print("Entre o id do cliente: ");
+		System.out.print("Entre o id do livro: ");
 		int id = entrada.nextInt();
 		entrada.nextLine();
 		
