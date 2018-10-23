@@ -22,7 +22,7 @@ public class InterfaceTexto {
 	}
 	
 	private void imprimeMenu() {
-		System.out.println("Contas Bancárias");
+		System.out.println("Livros");
 		System.out.println();
 		
 		switch (estadoAtual) {
@@ -78,7 +78,7 @@ public class InterfaceTexto {
 				estadoAtual = opcao == OP_CLIENTE ? Estado.CLIENTE : Estado.CONTA;
 			} else {
 				subMenu = estadoAtual == Estado.CLIENTE ? 
-						new InterfaceClienteTexto() : new InterfaceContaTexto();
+						new InterfaceLivroTexto() : new InterfaceAutorTexto();
 				
 				switch (opcao) {
 				case OP_ADICIONAR:
