@@ -2,59 +2,49 @@ package banco.ui;
 
 import java.util.List;
 
-import banco.dao.ClienteDao;
-import banco.dao.ContaDao;
-import banco.modelo.Cliente;
-import banco.modelo.Conta;
+import banco.dao.LivroDao;
+import banco.dao.AutorDao;
+import banco.modelo.Autor;
 
-public class InterfaceContaTexto extends InterfaceModeloTexto {
+public class InterfaceAutorTexto extends InterfaceModeloTexto {
 
-	private ContaDao dao;
-	private ClienteDao clienteDao;
+	private AutorDao dao;
+	private LivroDao clienteDao;
 	
-	public InterfaceContaTexto() {
+	public InterfaceAutorTexto() {
 		super();
-		dao = new ContaDao();
-		clienteDao = new ClienteDao();
+		dao = new AutorDao();
 	}
 	
 	@Override
 	public void adicionar() {
-		System.out.println("Adicionar conta");
+		System.out.println("Adicionar autor");
 		System.out.println();
 		
-		Conta novaConta = obtemDadosConta(null);	
-		dao.insert(novaConta);
+		Autor novoAutor = obtemDadosConta(null);	
+		dao.insert(novoAutor);
 	}
 
-	private Conta obtemDadosConta(Conta conta) {
-		System.out.print("Insira o número da conta: ");
-		int numero = entrada.nextInt();
+	private Autor obtemDadosConta(Autor conta) {
+		System.out.print("Insira o nome do autor: ");
+		String nome = entrada.nextLine();
 		
-		System.out.print("Insira o número da agência: ");
-		int agencia = entrada.nextInt();
+		System.out.print("Insira o cpf da autor: ");
+		long cpf = entrada.nextLong();
 		
-		System.out.print("Insira o saldo: ");
-		double saldo = entrada.nextDouble();
-		
-		System.out.print("Insira o ID do cliente: ");
-		int idCliente = entrada.nextInt();
-		
-		Cliente cliente = clienteDao.getByKey(idCliente);
-		
-		return new Conta(0, agencia, numero, cliente, saldo);
+		return new Autor(0, nome, cpf);
 	}
 
 	@Override
 	public void listarTodos() {
-		List<Conta> contas = dao.getAll();
+		List<Autor> contas = dao.getAll();
 		
 		System.out.println("Lista de contas");
 		System.out.println();
 		
 		System.out.println("id\tAgência\tNúmero\tSaldo\tID do Cliente\tNome do Cliente");
 		
-		for (Conta conta : contas) {
+		for (Autor conta : contas) {
 			imprimeItem(conta);
 		}
 	}
@@ -70,13 +60,13 @@ public class InterfaceContaTexto extends InterfaceModeloTexto {
 		int id = entrada.nextInt();
 		entrada.nextLine();
 		
-		Conta contaAModificar = dao.getByKey(id);
+		Autor contaAModificar = dao.getByKey(id);
 		
-		Conta novaConta = obtemDadosConta(contaAModificar);
+		Autor novoAutor = obtemDadosConta(contaAModificar);
 		
-		novaConta.setId(id);
+		novoAutor.setId(id);
 		
-		dao.update(novaConta);
+		dao.update(novoAutor);
 	}
 
 	@Override
