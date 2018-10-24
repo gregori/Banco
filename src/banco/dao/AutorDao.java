@@ -8,66 +8,59 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import banco.modelo.Cliente;
-import banco.modelo.Conta;
+import banco.modelo.Autor;
 
-public class ContaDao implements Dao<Conta> {
+public class AutorDao implements Dao<Autor> {
 	
-	private static final String GET_BY_ID = "SELECT * FROM conta NATURAL JOIN cliente WHERE id = ?";
-	private static final String GET_ALL = "SELECT * FROM conta NATURAL JOIN cliente";
-	private static final String INSERT = "INSERT INTO conta (agencia, cliente_id, numero, saldo) "
-			+ "VALUES (?, ?, ?, ?)";
-	private static final String UPDATE = "UPDATE conta SET agencia = ?, cliente_id = ?, numero = ?, "
-			+ "saldo = ? WHERE id = ?";
-	private static final String DELETE = "DELETE FROM conta WHERE id = ?";
+	private static final String GET_BY_ID = "SELECT * FROM autores WHERE id = ?";
+	private static final String GET_ALL = "SELECT * FROM autores";
+	private static final String INSERT = "INSERT INTO autores (nome, cpf) "
+			+ "VALUES (?, ?)";
+	private static final String UPDATE = "UPDATE autores SET nome = ?, cpf = ? WHERE id = ?";
+	private static final String DELETE = "DELETE FROM autores WHERE id = ?";
 	
-	public ContaDao() {
+	public AutorDao() {
 		try {
 			createTable();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro ao criar tabela no banco.", e);
+			//e.printStackTrace();
 		}
 	}
 	
 	private void createTable() throws SQLException {
-	    final String sqlCreate = "CREATE TABLE IF NOT EXISTS conta"
-	            + "  (id           INTEGER,"
-	            + "   agencia      INTEGER,"
-	            + "   cliente_id   INTEGER,"
-	            + "   numero	   INTEGER,"
-	            + "   saldo        DOUBLE,"
-	            + "   FOREIGN KEY (cliente_id) REFERENCES cliente(id),"
-	            + "   PRIMARY KEY (id))";
+	    String sqlCreate = "CREATE TABLE IF NOT EXISTS autores"
+	            + "  (id INTEGER PRIMARY KEY,"
+	            + "   nome VARCHAR(50),"
+	            + "   cpf LONGINT)";
 	    
 	    Connection conn = DbConnection.getConnection();
 
+
 	    Statement stmt = conn.createStatement();
 	    stmt.execute(sqlCreate);
+	    
+	    close(conn, stmt, null);
 	}
 	
 	
-	private Conta getContaFromRS(ResultSet rs) throws SQLException
-    {
-		Conta conta = new Conta();
+	private Autor getAutorFromRS(ResultSet rs) throws SQLException {
+		Autor autor = new Autor();
 			
-		conta.setId( rs.getInt("id") );
-		conta.setAgencia( rs.getInt("agencia") );
-		conta.setNumero( rs.getInt("numero"));
-		conta.setSaldo( rs.getDouble("saldo") );
-		conta.setCliente( new Cliente(rs.getInt("cliente_id"), rs.getString("nome"), 
-				rs.getString("endereco"), rs.getLong("cpf"),  rs.getLong("rg"),
-				rs.getLong("telefone"), rs.getDouble("renda_mensal")) );
+		autor.setId( rs.getInt("id") );
+		autor.setNome( rs.getString("nome") );
+		autor.setCpf( rs.getLong("cpf") );
 	
-		return conta;
+		return autor;
     }
 	
 	@Override
-	public Conta getByKey(int id) {
+	public Autor getByKey(int id) {
 		Connection conn = DbConnection.getConnection();
+		
+		Autor autor = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
-		Conta conta = null;
 		
 		try {
 			stmt = conn.prepareStatement(GET_BY_ID);
@@ -75,24 +68,24 @@ public class ContaDao implements Dao<Conta> {
 			rs = stmt.executeQuery();
 			
 			if (rs.next()) {
-				conta = getContaFromRS(rs);
+				autor = getAutorFromRS(rs);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro ao obter autor pela chave.", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
 		
-		return conta;
+		return autor;
 	}
 
 	@Override
-	public List<Conta> getAll() {
+	public List<Autor> getAll() {
 		Connection conn = DbConnection.getConnection();
+		
+		List<Autor> autores = new ArrayList<>();
 		Statement stmt = null;
 		ResultSet rs = null;
-		
-		List<Conta> conta = new ArrayList<>();
 		
 		try {
 			stmt = conn.createStatement();
@@ -100,40 +93,38 @@ public class ContaDao implements Dao<Conta> {
 			rs = stmt.executeQuery(GET_ALL);
 			
 			while (rs.next()) {
-				conta.add(getContaFromRS(rs));
+				autores.add(getAutorFromRS(rs));
 			}			
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro ao obter todos os autores.", e);
 		} finally {
 			close(conn, stmt, rs);
 		}
 		
-		return conta;
+		return autores;
 	}
 
 	@Override
-	public void insert(Conta conta) {
+	public void insert(Autor autor) {
 		Connection conn = DbConnection.getConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
 			stmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			stmt.setInt(1, conta.getAgencia());
-			stmt.setInt(2, conta.getCliente().getId());
-			stmt.setInt(3, conta.getNumero());
-			stmt.setDouble(4, conta.getSaldo());
+			stmt.setString(1, autor.getNome());
+			stmt.setLong(2, autor.getCpf());
 			
 			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			
 			if (rs.next()) {
-				conta.setId(rs.getInt(1));
+				autor.setId(rs.getInt(1));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
+			throw new RuntimeException("Erro ao inserir autor.", e);
+		}finally {
 			close(conn, stmt, rs);
 		}
 
@@ -142,7 +133,6 @@ public class ContaDao implements Dao<Conta> {
 	@Override
 	public void delete(int id) {
 		Connection conn = DbConnection.getConnection();
-		
 		PreparedStatement stmt = null;
 		
 		try {
@@ -152,32 +142,29 @@ public class ContaDao implements Dao<Conta> {
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro ao remover autor.", e);
 		} finally {
 			close(conn, stmt, null);
 		}
 	}
 
 	@Override
-	public void update(Conta conta) {
+	public void update(Autor autor) {
 		Connection conn = DbConnection.getConnection();
-		
 		PreparedStatement stmt = null;
 		
 		try {
 			stmt = conn.prepareStatement(UPDATE);
-			stmt.setInt(1, conta.getAgencia());
-			stmt.setInt(2, conta.getCliente().getId());
-			stmt.setInt(3, conta.getNumero());
-			stmt.setDouble(4, conta.getSaldo());
-			stmt.setInt(5, conta.getId());
+			stmt.setString(1, autor.getNome());
+			stmt.setLong(2, autor.getCpf());
+			stmt.setInt(3, autor.getId());
 			
 			stmt.executeUpdate();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new RuntimeException("Erro ao atualizar autor.", e);
 		} finally {
-			close (conn, stmt, null);
+			close(conn, stmt, null);
 		}
 	}
 	
