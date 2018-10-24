@@ -30,9 +30,9 @@ public class AutorDao implements Dao<Autor> {
 	
 	private void createTable() throws SQLException {
 	    String sqlCreate = "CREATE TABLE IF NOT EXISTS autores"
-	            + "  (id INTEGER,"
+	            + "  (id INTEGER PRIMARY KEY,"
 	            + "   nome VARCHAR(50),"
-	            + "   cpf LONGINT,";
+	            + "   cpf LONGINT)";
 	    
 	    Connection conn = DbConnection.getConnection();
 
@@ -157,6 +157,7 @@ public class AutorDao implements Dao<Autor> {
 			stmt = conn.prepareStatement(UPDATE);
 			stmt.setString(1, autor.getNome());
 			stmt.setLong(2, autor.getCpf());
+			stmt.setInt(3, autor.getId());
 			
 			stmt.executeUpdate();
 			

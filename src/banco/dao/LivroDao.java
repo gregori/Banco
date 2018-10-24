@@ -9,15 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import banco.modelo.Livro;
-
-import banco.dao.AutorDao;
+import banco.modelo.Autor;
 
 public class LivroDao implements Dao<Livro> {
 	
-	private AutorDao autorDao;
-	
-	private static final String GET_BY_ID = "SELECT * FROM livros WHERE id = ?";
-	private static final String GET_ALL = "SELECT * FROM livros";
+	private static final String GET_BY_ID = "SELECT * FROM livros as l JOIN autores as a ON a.id = l.autor WHERE l.id = ?";
+	private static final String GET_ALL = "SELECT * FROM livros as l JOIN autores as a ON a.id = l.autor";
 	private static final String INSERT = "INSERT INTO livros (titulo, anoPublicacao, editora, autor) "
 			+ "VALUES (?, ?, ?, ?)";
 	private static final String UPDATE = "UPDATE livros SET titulo = ?, anoPublicacao = ?, editora = ?, "
@@ -35,11 +32,12 @@ public class LivroDao implements Dao<Livro> {
 	
 	private void createTable() throws SQLException {
 	    String sqlCreate = "CREATE TABLE IF NOT EXISTS livros"
-	            + "  (id INTEGER,"
+	            + "  (id INTEGER PRIMARY KEY,"
 	            + "   titulo VARCHAR(50),"
 	            + "   anoPublicacao INTEGER,"
 	            + "   editora VARCHAR(50),"
-	            + "   autor INTEGER,";
+	            + "   autor INTEGER,"
+	            + "	  FOREIGN KEY (autor) REFERENCES autores(id))";
 	    
 	    Connection conn = DbConnection.getConnection();
 
@@ -58,7 +56,9 @@ public class LivroDao implements Dao<Livro> {
 		livro.setTitulo( rs.getString("titulo") );
 		livro.setAnoPublicacao( rs.getInt("anoPublicacao") );
 		livro.setEditora( rs.getString("editora") );
-		livro.setAutor( autorDao.getByKey(rs.getInt("autor")));
+		livro.setAutor( new Autor(rs.getInt("autor"),
+						rs.getString("nome"),
+						rs.getLong("cpf")));
 	
 		return livro;
     }
@@ -170,6 +170,7 @@ public class LivroDao implements Dao<Livro> {
 			stmt.setInt(2, livro.getAnoPublicacao());
 			stmt.setString(3, livro.getEditora());
 			stmt.setInt(4, livro.getAutor().getId());
+			stmt.setInt(5,  livro.getId());
 			
 			stmt.executeUpdate();
 			

@@ -10,7 +10,6 @@ import banco.modelo.Autor;
 public class InterfaceLivroTexto extends InterfaceModeloTexto {
 	
 	private LivroDao dao;
-	private AutorDao autorDao;
 	
 	public InterfaceLivroTexto() {
 		super();
@@ -32,6 +31,8 @@ public class InterfaceLivroTexto extends InterfaceModeloTexto {
 		
 		System.out.println("Insira o id do autor do livro: ");
 		int autorId = entrada.nextInt();
+		
+		AutorDao autorDao = new AutorDao();
 		
 		Autor autor = autorDao.getByKey(autorId);
 		

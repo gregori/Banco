@@ -39,10 +39,10 @@ public class InterfaceAutorTexto extends InterfaceModeloTexto {
 	public void listarTodos() {
 		List<Autor> contas = dao.getAll();
 		
-		System.out.println("Lista de contas");
+		System.out.println("Lista de autores");
 		System.out.println();
 		
-		System.out.println("id\tAgência\tNúmero\tSaldo\tID do Cliente\tNome do Cliente");
+		System.out.println("id\tNome\tCPF");
 		
 		for (Autor conta : contas) {
 			imprimeItem(conta);
@@ -53,10 +53,10 @@ public class InterfaceAutorTexto extends InterfaceModeloTexto {
 	public void editar() {
 		listarTodos();
 		
-		System.out.println("Editar conta");
+		System.out.println("Editar autor");
 		System.out.println();
 		
-		System.out.print("Entre o id da conta: ");
+		System.out.print("Entre o id do autor: ");
 		int id = entrada.nextInt();
 		entrada.nextLine();
 		
@@ -73,10 +73,10 @@ public class InterfaceAutorTexto extends InterfaceModeloTexto {
 	public void excluir() {
 		listarTodos();
 		
-		System.out.println("Excluir conta");
+		System.out.println("Excluir autor");
 		System.out.println();
 		
-		System.out.print("Entre o id da conta: ");
+		System.out.print("Entre o id da autor: ");
 		int id = entrada.nextInt();
 		entrada.nextLine();
 		

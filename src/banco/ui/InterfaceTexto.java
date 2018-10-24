@@ -6,15 +6,15 @@ public class InterfaceTexto {
 	private Scanner entrada;
 	private Estado estadoAtual;
 	
-	private static final int OP_CLIENTE = 1;
-	private static final int OP_CONTA = 2;
+	private static final int OP_LIVRO = 1;
+	private static final int OP_AUTOR = 2;
 	private static final int OP_SAIR = 0;
 	private static final int OP_ADICIONAR = 1;
 	private static final int OP_EDITAR = 2;
 	private static final int OP_EXCLUIR = 3;
 	private static final int OP_LISTAR = 4;
 	
-	private enum Estado {PRINCIPAL, CLIENTE, CONTA};
+	private enum Estado {PRINCIPAL, LIVRO, AUTOR};
 	
 	public InterfaceTexto() {
 		entrada = new Scanner(System.in);
@@ -26,11 +26,11 @@ public class InterfaceTexto {
 		System.out.println();
 		
 		switch (estadoAtual) {
-		case CLIENTE:
-			imprimeMenuCliente();
+		case LIVRO:
+			imprimeMenuLivro();
 			break;
-		case CONTA:
-			imprimeMenuConta();
+		case AUTOR:
+			imprimeMenuAutor();
 			break;
 		default:
 			imprimeMenuPrincipal();
@@ -39,7 +39,7 @@ public class InterfaceTexto {
 		System.out.println("0 - Sair");
 		
 		System.out.println();
-		System.out.print("Escolha uma op√ß√£o: ");	
+		System.out.print("Escolha uma opÁ„o: ");	
 	}
 	
 	private int leOpcao() {
@@ -49,22 +49,22 @@ public class InterfaceTexto {
 	}
 	
 	private void imprimeMenuPrincipal() {
-		System.out.println("1 - Administra√ß√£o de Clientes");
-		System.out.println("2 - Administra√ß√£o de Contas");
+		System.out.println("1 - AdministraÁ„o de Livros");
+		System.out.println("2 - AdministraÁ„o de Autores");
 	}
 	
-	private void imprimeMenuCliente() {
-		System.out.println("1 - Adicionar cliente");
-		System.out.println("2 - Editar cliente");
-		System.out.println("3 - Excluir cliente");
-		System.out.println("4 - Listar clientes");
+	private void imprimeMenuLivro() {
+		System.out.println("1 - Adicionar livro");
+		System.out.println("2 - Editar livro");
+		System.out.println("3 - Excluir livro");
+		System.out.println("4 - Listar livros");
 	}
 	
-	private void imprimeMenuConta() {
-		System.out.println("1 - Adicionar conta");
-		System.out.println("2 - Editar conta");
-		System.out.println("3 - Excluir conta");
-		System.out.println("4 - Listar contas");
+	private void imprimeMenuAutor() {
+		System.out.println("1 - Adicionar autor");
+		System.out.println("2 - Editar autor");
+		System.out.println("3 - Excluir autor");
+		System.out.println("4 - Listar autores");
 	}
 		
 	public void executa() {
@@ -75,9 +75,9 @@ public class InterfaceTexto {
 		
 		while (opcao != OP_SAIR) {
 			if (estadoAtual == Estado.PRINCIPAL) {
-				estadoAtual = opcao == OP_CLIENTE ? Estado.CLIENTE : Estado.CONTA;
+				estadoAtual = opcao == OP_LIVRO ? Estado.LIVRO : Estado.AUTOR;
 			} else {
-				subMenu = estadoAtual == Estado.CLIENTE ? 
+				subMenu = estadoAtual == Estado.LIVRO ? 
 						new InterfaceLivroTexto() : new InterfaceAutorTexto();
 				
 				switch (opcao) {
@@ -94,7 +94,7 @@ public class InterfaceTexto {
 					subMenu.listarTodos();
 					break;
 				default:
-					System.out.println("Op√ß√£o Inv√°lida. Tente novamente!");
+					System.out.println("OpÁ„o Inv·lida. Tente novamente!");
 				}
 			}
 			
